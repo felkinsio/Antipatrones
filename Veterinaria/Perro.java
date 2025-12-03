@@ -1,37 +1,36 @@
-package Veterinaria;
+package veterinaria;   //paquete en minúscula 
 
 public class Perro extends Animal {
-    
+
     public Perro(String nombre, String colorPelaje, String comidaFavorita) {
         super(nombre, colorPelaje, comidaFavorita);
     }
 
     @Override
     public void registrarAnimal() {
-        System.out.println("ingrese el nombre del perro:");
-        nombre = scanner.nextLine();
-        System.out.println("ingrese el color del pelaje:");
-        colorPelaje = scanner.nextLine();
-        System.out.println("ingrese la comida favorita:");
-        comidaFavorita = scanner.nextLine();
-        scanner.close();
+        // En una clase de dominio no se debe leer de consola.
+        // Aquí simplemente mostramos la información ya registrada.
+        System.out.println("Registrando perro...");
+        mostrarInfoBasica();
     }
 
     @Override
-    public padecimientos revisarAnimal() {
-        if(padecimiento == padecimientos.GRIPE) {
-            return this.padecimiento;
-        } else if (padecimiento == padecimientos.FRACTURA) {
-            return this.padecimiento;
-        } else if (padecimiento == padecimientos.INFECCION) {
-            return this.padecimiento;
-        } else {
-            return this.padecimiento;
-        }
+    public Padecimiento revisarAnimal() {
+        Padecimiento p = getPadecimiento();
+        System.out.println("Revisando perro. Padecimiento actual: " + p);
+        return p;
     }
+
     @Override
     public void tratarAnimal() {
-        switch (padecimiento) {
+        Padecimiento padecimientoActual = getPadecimiento();
+
+        if (padecimientoActual == null) {
+            System.out.println("El perro no presenta padecimientos actualmente.");
+            return;
+        }
+
+        switch (padecimientoActual) {
             case GRIPE:
                 System.out.println("Tratando la gripe del perro con medicamentos y reposo.");
                 break;
@@ -41,12 +40,14 @@ public class Perro extends Animal {
             case INFECCION:
                 System.out.println("Tratando la infección del perro con antibióticos.");
                 break;
+            case OTRO:
             default:
                 System.out.println("Tratando el padecimiento del perro de manera general.");
                 break;
         }
-        this.padecimiento = null;
-        System.out.println("se ha tratado al animal");
-    }
 
+        // Marcamos que ya fue tratado (podrías usar otro estado)
+        setPadecimiento(null);
+        System.out.println("Se ha tratado al animal.");
+    }
 }
